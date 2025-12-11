@@ -9,16 +9,16 @@ order_bp = Blueprint('order', __name__, url_prefix='/orders')
 @order_bp.route('/')
 def list():
     orders = Order.select()
-    return render_template('order_list.html', title='注文一覧', items=orders)
+    return render_template('order_list.html', title='貸出状況', items=orders)
 
 
 @order_bp.route('/add', methods=['GET', 'POST'])
 def add():
     if request.method == 'POST':
         user_id = request.form['user_id']
-        product_id = request.form['product_id']
-        order_date = datetime.now()
-        Order.create(user=user_id, product=product_id, order_date=order_date)
+        book_name = request.form['book_name']
+        rental_date = datetime.now()
+        Order.create(user=user_id, product=book_name, rental_date=rental_date)
         return redirect(url_for('order.list'))
     
     users = User.select()
@@ -34,7 +34,7 @@ def edit(order_id):
 
     if request.method == 'POST':
         order.user = request.form['user_id']
-        order.product = request.form['product_id']
+        order.product = request.form['book_name']
         order.save()
         return redirect(url_for('order.list'))
 
